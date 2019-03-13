@@ -1,0 +1,386 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="libreriavsRModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="tfactura">
+          <Key>
+            <PropertyRef Name="CodFactura" />
+          </Key>
+          <Property Name="CodFactura" Type="int" Nullable="false" />
+          <Property Name="CodUsuario" Type="int" Nullable="false" />
+          <Property Name="FechaFactura" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Borrado" Type="nvarchar" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tlibro">
+          <Key>
+            <PropertyRef Name="CodLibro" />
+          </Key>
+          <Property Name="CodLibro" Type="int" Nullable="false" />
+          <Property Name="Autor" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Titulo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="IDTema" Type="int" Nullable="false" />
+          <Property Name="Paginas" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Precio" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Formatouno" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Formatodos" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Formatotres" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Estado" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Borrado" Type="nvarchar" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tlineafactura">
+          <Key>
+            <PropertyRef Name="IDLinea" />
+          </Key>
+          <Property Name="IDLinea" Type="int" Nullable="false" />
+          <Property Name="CodFactura" Type="int" Nullable="false" />
+          <Property Name="CodLibro" Type="int" Nullable="false" />
+          <Property Name="Cantidad" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Total" Type="nvarchar" MaxLength="25" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ttema">
+          <Key>
+            <PropertyRef Name="IDTema" />
+          </Key>
+          <Property Name="IDTema" Type="int" Nullable="false" />
+          <Property Name="tema" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Borrado" Type="smallint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tusuario">
+          <Key>
+            <PropertyRef Name="CodUsuario" />
+          </Key>
+          <Property Name="CodUsuario" Type="int" Nullable="false" />
+          <Property Name="Nick" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Pass" Type="nvarchar" MaxLength="15" Nullable="false" />
+          <Property Name="Rol" Type="nvarchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_tfactura_tusuario">
+          <End Role="tusuario" Type="Self.tusuario" Multiplicity="1" />
+          <End Role="tfactura" Type="Self.tfactura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tusuario">
+              <PropertyRef Name="CodUsuario" />
+            </Principal>
+            <Dependent Role="tfactura">
+              <PropertyRef Name="CodUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tlibro_ttema">
+          <End Role="ttema" Type="Self.ttema" Multiplicity="1" />
+          <End Role="tlibro" Type="Self.tlibro" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ttema">
+              <PropertyRef Name="IDTema" />
+            </Principal>
+            <Dependent Role="tlibro">
+              <PropertyRef Name="IDTema" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tlineafactura_tfactura">
+          <End Role="tfactura" Type="Self.tfactura" Multiplicity="1" />
+          <End Role="tlineafactura" Type="Self.tlineafactura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tfactura">
+              <PropertyRef Name="CodFactura" />
+            </Principal>
+            <Dependent Role="tlineafactura">
+              <PropertyRef Name="CodFactura" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tlineafactura_tlibro">
+          <End Role="tlibro" Type="Self.tlibro" Multiplicity="1" />
+          <End Role="tlineafactura" Type="Self.tlineafactura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tlibro">
+              <PropertyRef Name="CodLibro" />
+            </Principal>
+            <Dependent Role="tlineafactura">
+              <PropertyRef Name="CodLibro" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="libreriavsRModelStoreContainer">
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tfactura" EntityType="Self.tfactura" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tlibro" EntityType="Self.tlibro" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tlineafactura" EntityType="Self.tlineafactura" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ttema" EntityType="Self.ttema" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tusuario" EntityType="Self.tusuario" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_tfactura_tusuario" Association="Self.FK_tfactura_tusuario">
+            <End Role="tusuario" EntitySet="tusuario" />
+            <End Role="tfactura" EntitySet="tfactura" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tlibro_ttema" Association="Self.FK_tlibro_ttema">
+            <End Role="ttema" EntitySet="ttema" />
+            <End Role="tlibro" EntitySet="tlibro" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tlineafactura_tfactura" Association="Self.FK_tlineafactura_tfactura">
+            <End Role="tfactura" EntitySet="tfactura" />
+            <End Role="tlineafactura" EntitySet="tlineafactura" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tlineafactura_tlibro" Association="Self.FK_tlineafactura_tlibro">
+            <End Role="tlibro" EntitySet="tlibro" />
+            <End Role="tlineafactura" EntitySet="tlineafactura" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="libreriavsRModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="tfactura">
+          <Key>
+            <PropertyRef Name="CodFactura" />
+          </Key>
+          <Property Name="CodFactura" Type="Int32" Nullable="false" />
+          <Property Name="CodUsuario" Type="Int32" Nullable="false" />
+          <Property Name="FechaFactura" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Borrado" Type="String" MaxLength="1" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="tusuario" Relationship="Self.FK_tfactura_tusuario" FromRole="tfactura" ToRole="tusuario" />
+          <NavigationProperty Name="tlineafactura" Relationship="Self.FK_tlineafactura_tfactura" FromRole="tfactura" ToRole="tlineafactura" />
+        </EntityType>
+        <EntityType Name="tlibro">
+          <Key>
+            <PropertyRef Name="CodLibro" />
+          </Key>
+          <Property Name="CodLibro" Type="Int32" Nullable="false" />
+          <Property Name="Autor" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Titulo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IDTema" Type="Int32" Nullable="false" />
+          <Property Name="Paginas" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Precio" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Formatouno" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Formatodos" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Formatotres" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Estado" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Borrado" Type="String" MaxLength="1" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="ttema" Relationship="Self.FK_tlibro_ttema" FromRole="tlibro" ToRole="ttema" />
+          <NavigationProperty Name="tlineafactura" Relationship="Self.FK_tlineafactura_tlibro" FromRole="tlibro" ToRole="tlineafactura" />
+        </EntityType>
+        <EntityType Name="tlineafactura">
+          <Key>
+            <PropertyRef Name="IDLinea" />
+          </Key>
+          <Property Name="IDLinea" Type="Int32" Nullable="false" />
+          <Property Name="CodFactura" Type="Int32" Nullable="false" />
+          <Property Name="CodLibro" Type="Int32" Nullable="false" />
+          <Property Name="Cantidad" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Total" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="tfactura" Relationship="Self.FK_tlineafactura_tfactura" FromRole="tlineafactura" ToRole="tfactura" />
+          <NavigationProperty Name="tlibro" Relationship="Self.FK_tlineafactura_tlibro" FromRole="tlineafactura" ToRole="tlibro" />
+        </EntityType>
+        <EntityType Name="ttema">
+          <Key>
+            <PropertyRef Name="IDTema" />
+          </Key>
+          <Property Name="IDTema" Type="Int32" Nullable="false" />
+          <Property Name="tema" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Borrado" Type="Int16" Nullable="false" />
+          <NavigationProperty Name="tlibro" Relationship="Self.FK_tlibro_ttema" FromRole="ttema" ToRole="tlibro" />
+        </EntityType>
+        <EntityType Name="tusuario">
+          <Key>
+            <PropertyRef Name="CodUsuario" />
+          </Key>
+          <Property Name="CodUsuario" Type="Int32" Nullable="false" />
+          <Property Name="Nick" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Pass" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Rol" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="tfactura" Relationship="Self.FK_tfactura_tusuario" FromRole="tusuario" ToRole="tfactura" />
+        </EntityType>
+        <Association Name="FK_tfactura_tusuario">
+          <End Role="tusuario" Type="Self.tusuario" Multiplicity="1" />
+          <End Role="tfactura" Type="Self.tfactura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tusuario">
+              <PropertyRef Name="CodUsuario" />
+            </Principal>
+            <Dependent Role="tfactura">
+              <PropertyRef Name="CodUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tlineafactura_tfactura">
+          <End Role="tfactura" Type="Self.tfactura" Multiplicity="1" />
+          <End Role="tlineafactura" Type="Self.tlineafactura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tfactura">
+              <PropertyRef Name="CodFactura" />
+            </Principal>
+            <Dependent Role="tlineafactura">
+              <PropertyRef Name="CodFactura" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tlibro_ttema">
+          <End Role="ttema" Type="Self.ttema" Multiplicity="1" />
+          <End Role="tlibro" Type="Self.tlibro" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ttema">
+              <PropertyRef Name="IDTema" />
+            </Principal>
+            <Dependent Role="tlibro">
+              <PropertyRef Name="IDTema" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tlineafactura_tlibro">
+          <End Role="tlibro" Type="Self.tlibro" Multiplicity="1" />
+          <End Role="tlineafactura" Type="Self.tlineafactura" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tlibro">
+              <PropertyRef Name="CodLibro" />
+            </Principal>
+            <Dependent Role="tlineafactura">
+              <PropertyRef Name="CodLibro" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="tfactura" EntityType="Self.tfactura" />
+          <EntitySet Name="tlibro" EntityType="Self.tlibro" />
+          <EntitySet Name="tlineafactura" EntityType="Self.tlineafactura" />
+          <EntitySet Name="ttema" EntityType="Self.ttema" />
+          <EntitySet Name="tusuario" EntityType="Self.tusuario" />
+          <AssociationSet Name="FK_tfactura_tusuario" Association="Self.FK_tfactura_tusuario">
+            <End Role="tusuario" EntitySet="tusuario" />
+            <End Role="tfactura" EntitySet="tfactura" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tlineafactura_tfactura" Association="Self.FK_tlineafactura_tfactura">
+            <End Role="tfactura" EntitySet="tfactura" />
+            <End Role="tlineafactura" EntitySet="tlineafactura" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tlibro_ttema" Association="Self.FK_tlibro_ttema">
+            <End Role="ttema" EntitySet="ttema" />
+            <End Role="tlibro" EntitySet="tlibro" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tlineafactura_tlibro" Association="Self.FK_tlineafactura_tlibro">
+            <End Role="tlibro" EntitySet="tlibro" />
+            <End Role="tlineafactura" EntitySet="tlineafactura" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="libreriavsRModelStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="libreriavsRModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tfactura">
+            <EntityTypeMapping TypeName="libreriavsRModel.tfactura">
+              <MappingFragment StoreEntitySet="tfactura">
+                <ScalarProperty Name="CodFactura" ColumnName="CodFactura" />
+                <ScalarProperty Name="CodUsuario" ColumnName="CodUsuario" />
+                <ScalarProperty Name="FechaFactura" ColumnName="FechaFactura" />
+                <ScalarProperty Name="Borrado" ColumnName="Borrado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tlibro">
+            <EntityTypeMapping TypeName="libreriavsRModel.tlibro">
+              <MappingFragment StoreEntitySet="tlibro">
+                <ScalarProperty Name="CodLibro" ColumnName="CodLibro" />
+                <ScalarProperty Name="Autor" ColumnName="Autor" />
+                <ScalarProperty Name="Titulo" ColumnName="Titulo" />
+                <ScalarProperty Name="IDTema" ColumnName="IDTema" />
+                <ScalarProperty Name="Paginas" ColumnName="Paginas" />
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+                <ScalarProperty Name="Formatouno" ColumnName="Formatouno" />
+                <ScalarProperty Name="Formatodos" ColumnName="Formatodos" />
+                <ScalarProperty Name="Formatotres" ColumnName="Formatotres" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Borrado" ColumnName="Borrado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tlineafactura">
+            <EntityTypeMapping TypeName="libreriavsRModel.tlineafactura">
+              <MappingFragment StoreEntitySet="tlineafactura">
+                <ScalarProperty Name="IDLinea" ColumnName="IDLinea" />
+                <ScalarProperty Name="CodFactura" ColumnName="CodFactura" />
+                <ScalarProperty Name="CodLibro" ColumnName="CodLibro" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ttema">
+            <EntityTypeMapping TypeName="libreriavsRModel.ttema">
+              <MappingFragment StoreEntitySet="ttema">
+                <ScalarProperty Name="IDTema" ColumnName="IDTema" />
+                <ScalarProperty Name="tema" ColumnName="tema" />
+                <ScalarProperty Name="Borrado" ColumnName="Borrado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tusuario">
+            <EntityTypeMapping TypeName="libreriavsRModel.tusuario">
+              <MappingFragment StoreEntitySet="tusuario">
+                <ScalarProperty Name="CodUsuario" ColumnName="CodUsuario" />
+                <ScalarProperty Name="Nick" ColumnName="Nick" />
+                <ScalarProperty Name="Pass" ColumnName="Pass" />
+                <ScalarProperty Name="Rol" ColumnName="Rol" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

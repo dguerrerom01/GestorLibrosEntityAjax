@@ -1,0 +1,91 @@
+﻿@using GestorLibrosEntityAjax.Models
+
+@{
+    ViewBag.Title = "carrito";
+    Layout = "~/Views/Plantilla/Plantilla.cshtml";
+
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 col-md-10 col-md-offset-1">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Libro</th>
+                        <th>Cantidad</th>
+                        <th class="text-center">Precio</th>
+                        <th class="text-center">Subtotal</th>
+                        <th> </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        float total = 0f;
+                        if (Session["carro"] != null)
+                        {
+                            Carrito carrito = Session["carro"] as Carrito;
+                            // List<TLineaFactura> carrito = (List<TLineaFactura>)Session["carro"];
+
+                            foreach (var linea in carrito.ItemList)
+
+                            {
+                                total = total + linea.subTotal();
+
+                                <tr>
+                                    <td class="col-sm-8 col-md-6">
+                                        <div class="media">
+                                            <a class="thumbnail pull-left" href="#"> <img class="media-object" src="http://icons.iconarchive.com/icons/double-j-design/ravenna-3d/256/Book-icon.png" style="width: 72px; height: 72px;"> </a>
+                                            <div class="media-body">
+                                                <h4 class="media-heading"><a href="#">@linea.Libro.Titulo - @linea.Libro.Autor</a></h4>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="col-sm-1 col-md-1" style="text-align: center">
+                                        <input type="number" class="form-control" id="exampleInputEmail1" value="@linea.Cantidad" disabled>
+                                    </td>
+                                    <td class="col-sm-1 col-md-1 text-center"><strong>@linea.Libro.Precio</strong></td>
+                                    <td class="col-sm-1 col-md-1 text-center"><strong>@linea.subTotal()</strong></td>
+                                    <td class="col-sm-1 col-md-1">
+                                        <button type="button" class="btn btn-danger">
+                                            <span class="glyphicon glyphicon-remove"></span> Eliminar
+                                        </button>
+                                    </td>
+                                </tr>
+
+                            }
+
+                        }
+
+                    }
+
+
+                    <tr>
+                        <td>   </td>
+                        <td>   </td>
+                        <td>   </td>
+                        <td><h3>Total</h3></td>
+                        <td class="text-right"><h3><strong>@total</strong></h3></td>
+                    </tr>
+                    <tr>
+                        <td>   </td>
+                        <td>   </td>
+                        <td>   </td>
+                        <td>
+                            <button type="button" class="btn btn-default">
+                                <span class="glyphicon glyphicon-shopping-cart"></span> Continue Shopping
+                            </button>
+                        </td>
+                        <td>
+                            <form action="/Carrito/doFactura" method="post">
+                                <button type="submit" class="btn btn-success">
+                                    Comprar <span class="glyphicon glyphicon-play"></span>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

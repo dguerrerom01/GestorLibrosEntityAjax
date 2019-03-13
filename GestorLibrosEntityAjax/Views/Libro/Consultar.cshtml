@@ -1,0 +1,35 @@
+﻿@model List<GestorLibrosEntityAjax.Models.tlibro>
+@using GestorLibrosEntityAjax.Models
+@{
+    ViewBag.Title = "Consultar";
+}
+<div id="form-main">
+    <span>Total de libros: @Model.Count</span>
+    <ul>
+        @foreach (var libro in Model)
+        {
+            <li>
+                <!-- Creamos un action link(Viene siendo un <a>), que llama al controlador Libro exactamente a la funcion verLibro. A esta se le pasa un ROUTING a la que le asignamos el valor(libro.CodLibro) a la variable(CodLibro) de la funcion verLibro -->
+                @Html.ActionLink(libro.Titulo + " - Ver", "verLibro", "Libro", new { CodLibro = @libro.CodLibro }, null)
+                @{
+                    if (Session["usuario"] != null && ((tusuario)Session["usuario"]).Rol.Equals("admin"))
+                    {
+                        @Html.ActionLink(" - Editar", "modificarLibro", "Libro", new { CodLibro = @libro.CodLibro }, null)
+                        @Ajax.ActionLink(" - Borrar", "borrarLibro", "Libro", new { CodLibro = @libro.CodLibro }, new AjaxOptions { HttpMethod = "POST" })
+
+                    }
+                    @Html.ActionLink(" - Al Carrito", "addCarrito", "Libro", new { CodLibro = @libro.CodLibro, accion = "Consultar" }, null)
+                }
+
+
+
+
+
+
+            </li>
+
+        }
+    </ul>
+</div>
+
+

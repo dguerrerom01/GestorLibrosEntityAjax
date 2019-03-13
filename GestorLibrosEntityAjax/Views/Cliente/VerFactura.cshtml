@@ -1,0 +1,16 @@
+﻿@using GestorLibrosEntityAjax.Models
+@model List<tfactura>
+@{
+    ViewBag.Title = "verFacturas";
+    Layout = "~/Views/Plantilla/Plantilla.cshtml";
+}
+
+<h2>verFacturas</h2>
+
+@foreach (var factura in Model)
+{
+
+
+    @Html.ActionLink("Ver Detalle Factura =>" + @factura.CodFactura, "detalleFactura", "Cliente", new { CodFactura = @factura.CodFactura }, null)
+
+}

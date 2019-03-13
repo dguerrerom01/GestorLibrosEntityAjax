@@ -1,0 +1,28 @@
+﻿@model GestorLibrosEntityAjax.Models.tlibro
+
+@{
+    ViewBag.Title = "verLibro";
+    Layout = "~/Views/Plantilla/Plantilla.cshtml";
+}
+
+<!-- Mostramos los datos en limpio.-->
+
+<div class="container">
+    <div class="row">
+        <label class="col-sm-5">Titulo</label><span class="prop-border col-sm-7">@Model.Titulo</span>
+    </div>
+    <div class="row">
+        <label class="col-sm-5">Autor</label><span class="prop-border col-sm-7">@Model.Autor</span>
+    </div>
+    <div class="row">
+        <label class="col-sm-5">Numero de páginas</label><span class="prop-border col-sm-7">@Model.Paginas</span>
+    </div>
+    <div class="row">
+        <label class="col-sm-5">Precio</label><span class="prop-border col-sm-7">@Model.Precio </span>
+    </div>
+    <div class="row">
+        <label class="col-sm-5">Tema</label><span class="prop-border col-sm-7">@Model.ttema.tema</span>
+    </div>
+</div>
+
+@Html.ActionLink(" - Al carraso", "addCarrito", "Libro", new { CodLibro = Model.CodLibro, accion = "Consultar" }, null)

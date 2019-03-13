@@ -1,0 +1,208 @@
+﻿@using GestorLibrosEntityAjax.Controllers
+@using GestorLibrosEntityAjax.Models
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    @*.:IES ARROYO HARNINA:.*@
+    <title>@ViewBag.Title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="css/footer.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link href="~/Content/css/style.css" rel="stylesheet" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+            <a class="navbar-brand" href="/">IES ARROYO HARNINA</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse " id="navbarTogglerDemo02">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+
+
+                    @{
+                        if (Session["usuario"] == null)
+                        {
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Login <span class="caret"></span></a>
+                                <ul id="login-dp" class="dropdown-menu">
+                                    <li>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <form class="form" role="form" method="post" action="/Inicio/login" accept-charset="UTF-8" id="login-nav">
+                                                    <div class="form-group">
+                                                        <label class="sr-only" for="exampleInputEmail2">Usuario</label>
+                                                        <input name="Nick" type="text" class="form-control" id="exampleInputEmail2" placeholder="Introduce Usuario" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="sr-only" for="exampleInputPassword2">Contraseña</label>
+                                                        <input name="Pass" type="password" class="form-control" id="exampleInputPassword2" placeholder="Introduce Contraseña" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <button type="submit" class="btn btn-primary btn-block">Loguearse</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+
+
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Registrarse <span class="caret"></span></a>
+                                <ul id="login-dp" class="dropdown-menu">
+                                    <li>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <form class="form" role="form" method="post" action="/Inicio/Registro" accept-charset="UTF-8" id="login-nav">
+                                                    <div class="form-group">
+                                                        <label class="sr-only" for="exampleInputEmail2">Usuario</label>
+                                                        <input name="Nick" type="text" class="form-control" id="exampleInputEmail2" placeholder="Introduce Usuario" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="sr-only" for="exampleInputPassword2">Contraseña</label>
+                                                        <input name="Pass" type="password" class="form-control" id="exampleInputPassword2" placeholder="Introduce Contraseña" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <button type="submit" class="btn btn-primary btn-block">Registrarse</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+
+
+                        }
+                    }
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Trabajar Con Libros</a>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-item">@Html.ActionLink("Consultar", "Consultar", "Libro")</div>
+
+                            @{
+                                if (Session["usuario"] != null && ((tusuario)Session["usuario"]).Rol.Equals("admin"))
+                                {
+                                    <div class="dropdown-item">@Html.ActionLink("Añadir Libro", "addLibro", "Libro")</div>
+                                }
+
+                            }
+
+                        </div>
+                    </li>
+
+                    @{
+                        if (Session["usuario"] != null)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Perfil</a>
+                                <div class="dropdown-menu">
+                                    <div class="dropdown-item">@Html.ActionLink("Ver Facturas", "verFacturas", "Cliente")</div>
+                                </div>
+                            </li>
+                        }
+                    }
+
+
+
+                    <!--
+
+
+                       // int? aux = (Session["carro"] as List<LibreriaV3._1.Modelo.TLibro>)?.Count;
+                       // int encarro = aux ?? 0;
+
+                    <div>
+                        <a href="//Url.Action("Consultar", "Libro")"><img src="~/Content/Imagen/img.png" /></a>
+                        <span class="badge badge-pill badge-info cart-badge">//encarro</span>
+                    </div>
+                      -->
+
+
+
+
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Carrito</a>
+                        <div class="dropdown-menu">
+
+                            @{
+                                if (Session["carro"] != null)
+                                {
+                                    float total = 0f;
+                                    Carrito carrito = (Carrito)Session["carro"];
+
+                                    foreach (var linea in carrito.ItemList)
+
+                                    {
+                                        total = total + linea.subTotal();
+                                        <div class="dropdown-item">
+                                            <span class="item">
+                                                <span class="item-left">
+                                                    <span class="item-info">
+                                                        <span>
+                                                            Libro : @linea.Libro.Titulo
+                                                        </span>
+                                                        <span>
+                                                            Cantidad : @linea.Cantidad
+                                                        </span>
+                                                        <span>
+                                                            Precio : @linea.subTotal() €
+                                                        </span>
+                                                    </span>
+                                                </span>
+                                                <span class="item-right">
+                                                    @Html.ActionLink("+", "addCarrito", "Libro", new { CodLibro = @linea.Libro.CodLibro }, new { @class = "btn btn-xs btn-primary pull-right" })
+                                                    @Html.ActionLink("-", "borrarItemCarrito", "Libro", new { CodLibro = @linea.Libro.CodLibro }, new { @class = "btn btn-xs btn-danger pull-right" })
+
+                                                </span>
+                                            </span>
+                                        </div>
+                                    }
+                                    <span>Total : @total €</span>
+                                }
+
+                            }
+
+
+                            <form action="/Carrito/carrito" method="post">
+                                <button class="btn btn-xs btn-success btn-block">Comprar</button>
+                            </form>
+
+
+                        </div>
+
+                    </li>
+
+
+
+
+                </ul>
+
+                <!--Carritooooo-->
+
+
+
+
+
+            </div>
+        </nav>
+    </header>
+
+
+
+
+    @RenderBody()
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+</body>
+</html>

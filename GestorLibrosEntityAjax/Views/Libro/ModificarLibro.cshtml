@@ -1,0 +1,71 @@
+﻿@using GestorLibrosEntityAjax.Models
+@{
+    ViewBag.Title = "modificarLibro";
+    Layout = "~/Views/Plantilla/Plantilla.cshtml";
+    tlibro libro = Model[0];
+}
+
+<h3 style="margin-bottom: 25px; text-align: center;">Añadir Libro</h3>
+
+
+
+<div class="container">
+    <div class="col-md-10">
+        <div class="form-area">
+            <!-- Creamos un formulario de HTML, creando los campos tantos como tenga el tipo libro(Titulo,autor,tema,paginas.... etc)-->
+            <form class="form" method="post">
+                <div class="form-group">
+                    <label for="titulo">Titulo</label>
+                    <!-- Hay que tener en cuenta que el NAME tiene que tener el mismo nombre que el nombre de la propiedad del objeto, que en este caso es titulo. Asi con los necesarios.-->
+                    <input name="Titulo" type="text" maxlength="30" required="" class="form-control" placeholder="Título" id="titulo" value="@libro.Titulo" />
+                </div>
+                <div class="form-group">
+                    <label for="autor">Autor</label>
+                    <input name="Autor" type="text" maxlength="30" minlength="5" required="" class="form-control" placeholder="Autor" id="autor" value="@libro.Autor" />
+                </div>
+                <div class="form-group">
+                    <label for="tema">Tema</label>
+                    <select name="Tema" class="form-control" id="IDTema">
+                        <!-- Recorremos la List generica que nos llega del modelo, tenemos que decirle que es un TTema si no dara error.-->
+                        @foreach (ttema tema in Model[1])
+                        {    //Ojo aqui, una cosa es el nombre a mostrar y otra diferente es el valor a asignar. A la propiedad Value se debe indicar el valor indice, en este caso es tema.Tema y entre
+                             //las >aqui< se debe poner el valor a mostrar. En este caso son ambos lo mismo. Pero por ejemplo una persona puede tener un ID y un Nombre, pues segun el caso podriamos poner
+                             //en el value el ID y entre >< el nombre, asi cuando hagamos el submit(Boton Guardar,enviar o como querais llamarlo) mandara el ID.
+                            <option value="@tema.IDTema">@tema.tema</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="paginas">Paginas</label>
+                    <input name="Paginas" type="text" required="" class="form-control" placeholder="Páginas" id="paginas" value="@libro.Paginas" />
+                </div>
+                <div class="form-group">
+                    <label for="precio">Precio</label>
+                    <input name="Precio" type="text" required="" class="form-control" placeholder="Precio" id="precio" value="@libro.Precio" />
+                </div>
+                <fieldset class="form-group">
+                    <legend>Formato:</legend>
+                    <input type="checkbox" name="Formatouno" value="Cartoné" @(libro.Formatouno == "N/A" ? "" : "checked") />Cartoné <br>
+                    <input type="checkbox" name="Formatodos" value="Rústica" @(libro.Formatodos == "N/A" ? "" : "checked") />Rústica<br>
+                    <input type="checkbox" name="Formatotres" value="Tapa Dura" @(libro.Formatotres == "N/A" ? "" : "checked") />Tapa Dura<br>
+                </fieldset>
+                <fieldset class="form-group">
+                    <legend>Estado: </legend>
+                    <input type="radio" name="Estado" value="novedad" @(libro.Estado == "novedad" ? "checked" : "") />Novedad<br />
+                    <input type="radio" name="Estado" value="reedicion" @(libro.Estado == "reedicion" ? "checked" : "") />Reedición<br />
+                </fieldset>
+                <br>
+                <div class="submit">
+                    <!--Boton enviar, al pulsar HTTP se encarga de mandar los datos al servidor, en este caso es un metodo POST(Declarado en la etiqueta form al principio).
+                        Se recomienda usar el metodo POST al enviar datos al servidor ya que van mas ocultos. Si usaramos GET, se veria toda la informacion en la barra de
+                        direcciones. GET SIEMPRE PARA PEDIR DATOS AL SERVIDOR. POST SIEMPRE PARA ENVIAR DATOS AL SERVIDOR.
+                        -->
+                    <input type="submit" value="Modificar Datos" class="btn btn-primary pull-right" id="button-blue" />
+                    <div class="ease"></div>
+                </div>
+                <br>
+            </form>
+        </div>
+    </div>
+</div>
